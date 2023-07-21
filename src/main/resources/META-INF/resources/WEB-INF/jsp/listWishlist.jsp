@@ -14,6 +14,7 @@
                         <th>Description</th>
                         <th>Completion Date</th>
                         <th>Is Done ?</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -23,6 +24,7 @@
                             <td>${wishlist.description}</td>
                             <td>${wishlist.targetDate}</td>
                             <td>${wishlist.done}</td>
+                            <td><a href="delete-wishlist?id=${wishlist.id}" class = "btn btn-warning" >Delete ${wishlist.id}</a></td>
                         </tr>
                     </c:forEach>
                     </tbody>
