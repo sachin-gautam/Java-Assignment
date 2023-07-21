@@ -1,6 +1,8 @@
 package com.javassignment.wishlist;
 
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -26,8 +28,8 @@ public class WishlistController {
     //list-wishlist
     @RequestMapping("list-wishlist")
     public String listAllWishlist(ModelMap model){
-
-        List<Wishlist> wishlists = wishlistService.findByUsername("sachin");
+        String username = getLoggedInUsername(model);
+        List<Wishlist> wishlists = wishlistService.findByUsername(username);
         model.addAttribute("wishlists",wishlists);
 
         return "listWishlist";
@@ -35,7 +37,7 @@ public class WishlistController {
 
     @RequestMapping(value = "add-wishlist", method = RequestMethod.GET)
     public String showNewWishlist(ModelMap model){
-        String username = (String)model.get("name");
+        String username = getLoggedInUsername(model);
         Wishlist wishlist = new Wishlist(0,username,"",
                 LocalDate.now().plusYears(1),false);
         model.put("wishlist",wishlist);
@@ -49,9 +51,9 @@ public class WishlistController {
             return "wishlist";
         }
 
-        String username = (String)model.get("name");
+        String username = getLoggedInUsername(model);
         wishlistService.addWishlist(username,wishlist.getDescription(),
-                LocalDate.now().plusYears(1),false);
+                wishlist.getTargetDate(),false);
         return "redirect:list-wishlist";
     }
 
@@ -61,5 +63,33 @@ public class WishlistController {
         wishlistService.deleteById(id);
         return "redirect:list-wishlist";
     }
+
+    @RequestMapping(value = "update-wishlist", method = RequestMethod.GET)
+    public String updateWishlistPage(@RequestParam int id,ModelMap model){
+        Wishlist wishlist = wishlistService.findByID(id);
+        model.addAttribute(wishlist);
+        return "wishlist";
+    }
+
+    @RequestMapping(value = "update-wishlist", method = RequestMethod.POST)
+    public String updateWishlist(ModelMap model, @Valid Wishlist wishlist, BindingResult result){
+
+        if(result.hasErrors()){
+            return "wishlist";
+        }
+
+        String username = getLoggedInUsername(model);
+        wishlist.setUsername(username);
+        wishlistService.updateWishlist(wishlist);
+        return "redirect:list-wishlist";
+    }
+
+    private static String getLoggedInUsername(ModelMap model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
+    }
+
+
+
 
 }

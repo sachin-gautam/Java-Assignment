@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public class Wishlist {
 
-     private long id;
+     private int id;
      private String username;
 
      @Size(min=10, message = "Enter at least 10 characters")
@@ -14,7 +14,7 @@ public class Wishlist {
      private LocalDate targetDate;
      private boolean done;
 
-    public Wishlist(long id, String username, String description, LocalDate targetDate, boolean done) {
+    public Wishlist(int id, String username, String description, LocalDate targetDate, boolean done) {
         this.id = id;
         this.username = username;
         this.description = description;
@@ -22,11 +22,11 @@ public class Wishlist {
         this.done = done;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
