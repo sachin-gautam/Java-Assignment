@@ -4,7 +4,7 @@ JAVA 19
 Spring (3.1.2)
 Spring Boot & Spring security
 Bootstrap for CSS Framework
-
+Database used is MySQL
 
 
 
